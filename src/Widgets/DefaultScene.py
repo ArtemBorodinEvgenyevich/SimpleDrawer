@@ -31,5 +31,3 @@ class DefaultScene(QtWidgets.QGraphicsScene):
             )
         )
         self._prev_point = event.scenePos()
-
-        print("kek")
