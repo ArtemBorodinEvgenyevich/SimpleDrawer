@@ -22,20 +22,28 @@ class Viewport(QtWidgets.QGraphicsView):
         """Interface to create a canvas"""
         self.scene()._setupPage(width, height)
 
+    def clearCanvas(self):
+        self.scene()._clearPage()
+        self.scene().deleteLater()
+
     def mouseMoveEvent(self, event: QtGui.QMouseEvent):
-        if self.itemAt(event.pos()) == self.scene().getCanvas():
-            self.scene().setDrawable(True)
-        else:
-            self.scene().setDrawable(False)
+        if self.items() != 0:
+            if self.itemAt(event.pos()) == self.scene().getCanvas():
+                self.scene().setDrawable(True)
+            else:
+                self.scene().setDrawable(False)
+        
+        super(Viewport, self).mouseMoveEvent(event)
 
     def mousePressEvent(self, event: QtGui.QMouseEvent):
         if event.buttons() & QtCore.Qt.RightButton:
             self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
 
-        if event.buttons() & QtCore.Qt.LeftButton:
-            print(self.itemAt(event.pos()))
-            if self.itemAt(event.pos()) == self.scene().getCanvas():
-                self.scene().setDrawable(True)
+        if self.items() != 0:
+            if event.buttons() & QtCore.Qt.LeftButton:
+                print(self.itemAt(event.pos()))
+                if self.itemAt(event.pos()) == self.scene().getCanvas():
+                    self.scene().setDrawable(True)
 
         super(Viewport, self).mousePressEvent(event)
 

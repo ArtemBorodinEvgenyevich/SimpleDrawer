@@ -12,8 +12,8 @@ class DefaultScene(QtWidgets.QGraphicsScene):
 
 
     def mousePressEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
-        if event.buttons() & QtCore.Qt.LeftButton:
-            print("kek")
+
+        if self.items() != 0 and event.button() & QtCore.Qt.LeftButton:
             if self._canDraw:
                 self.addEllipse(
                     event.scenePos().x() - 5,
@@ -25,8 +25,10 @@ class DefaultScene(QtWidgets.QGraphicsScene):
         self._prev_point = event.scenePos()
 
     def mouseMoveEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
-        if event.buttons() & QtCore.Qt.LeftButton:
+        if self.items() != 0 and event.button() & QtCore.Qt.LeftButton:
             if self._canDraw:
+                print("kek")
+
                 self.addLine(
                     self._prev_point.x(),
                     self._prev_point.y(),
@@ -65,8 +67,11 @@ class DefaultScene(QtWidgets.QGraphicsScene):
 
     def _clearPage(self):
         """Removing canvas and all elements"""
-        for item in self.items():
-            self.removeItem(item)
+        if self.items().count() != 0:
+            for item in self.items():
+                self.removeItem(item)
+        return
+
 
 
 

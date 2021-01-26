@@ -1,7 +1,7 @@
 from PySide2 import QtWidgets
 from src.Widgets.CentralWidget import CentralWidget
 from src.Widgets.MenuBar import MenuBar
-from src.Widgets.Actions.NewFile import NewFileAction
+from src.Actions.NewFile import NewFileAction
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -17,7 +17,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def setupMenu(self):
-        self.newFileAction = NewFileAction()
+        self.newFileAction = NewFileAction(self)
 
         self.menuBar.fileMenu.addAction(self.newFileAction)
 

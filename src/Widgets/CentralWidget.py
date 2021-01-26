@@ -12,10 +12,6 @@ class CentralWidget(QtWidgets.QWidget):
         self.setLayout(QtWidgets.QHBoxLayout())
         self.viewport = Viewport(parent=self)
 
-        self.setCanvas()
-
-        # TODO: tmp
-
 
     def paintEvent(self, event: QtGui.QPaintEvent):
         painter = QtGui.QPainter(self)
@@ -31,5 +27,8 @@ class CentralWidget(QtWidgets.QWidget):
         self.layout().addWidget(self.viewport)
         self.viewport.setActive(DefaultScene())
         self.viewport.setSceneRect(0, 0, width, height)
-        self.viewport.createCanvas(640, 480)
+        self.viewport.createCanvas(width, height)
+
+    def clearCanvas(self):
+        self.viewport.clearCanvas()
 
