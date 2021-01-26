@@ -1,5 +1,7 @@
 from PySide2 import QtCore, QtWidgets, QtGui
 from src.Widgets.DefaultScene import DefaultScene
+from src.Widgets.Viewport import Viewport
+
 
 class CentralWidget(QtWidgets.QWidget):
     def __init__(self):
@@ -8,9 +10,12 @@ class CentralWidget(QtWidgets.QWidget):
         self._bgColorSecond = QtGui.QColor(114, 114, 114)
 
         self.setLayout(QtWidgets.QHBoxLayout())
-        self.viewport = QtWidgets.QGraphicsView()
+        self.viewport = Viewport(parent=self)
 
         self.setCanvas()
+
+        # TODO: tmp
+
 
     def paintEvent(self, event: QtGui.QPaintEvent):
         painter = QtGui.QPainter(self)
@@ -23,7 +28,8 @@ class CentralWidget(QtWidgets.QWidget):
         painter.drawRect(0, 0, self.width(), self.height())
 
     def setCanvas(self, width=640, height=480):
-        self.viewport.setScene(DefaultScene())
-        self.viewport.setSceneRect(0, 0, width, height)
-
         self.layout().addWidget(self.viewport)
+        self.viewport.setActive(DefaultScene())
+        self.viewport.setSceneRect(0, 0, width, height)
+        self.viewport.createCanvas(640, 480)
+
