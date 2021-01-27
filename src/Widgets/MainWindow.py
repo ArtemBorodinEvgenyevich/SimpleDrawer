@@ -1,24 +1,45 @@
-from PySide2 import QtWidgets
-from src.Widgets.CentralWidget import CentralWidget
+from PyQt5 import QtWidgets, QtCore, QtGui
 from src.Widgets.MenuBar import MenuBar
-from src.Widgets.Actions.NewFile import NewFileAction
+from src.Widgets.ViewArea import ViewArea
+from src.Widgets.Canvas import Canvas
+from src.Widgets.ColorPalette import PaletteHorizontal
 
 class MainWindow(QtWidgets.QMainWindow):
+
     def __init__(self):
-        super(MainWindow, self).__init__()
+        super().__init__()
 
-        self.menuBar = MenuBar()
-        self.toolBar = self.addToolBar("Actions")
-        self.central = CentralWidget()
+        self.menu = MenuBar()
+        self.canvas = Canvas()
+        self.viewArea = ViewArea()
+        self.colorPalette = PaletteHorizontal("32poly")
 
-        self.setCentralWidget(self.central)
-        self.setMenuBar(self.menuBar)
-        self.setupMenu()
+        self._initUI()
+        self.setCanvas()
+
+    def _initUI(self):
+        self.setMenuBar(self.menu)
+        self.viewArea.setWidget(self.canvas)
+
+        container = QtWidgets.QWidget()
+        container.setLayout(QtWidgets.QVBoxLayout())
+
+        container.layout().addWidget(self.colorPalette)
+        container.layout().addWidget(self.viewArea)
+
+        self.setCentralWidget(container)
+
+        self.colorPalette.selected.connect(self.canvas.setPenColor)
+
+    def setCanvas(self):
+        self.canvas.setPixmap(QtGui.QPixmap(640, 480))
+        self.canvas.pixmap().fill(QtCore.Qt.white)
+        self.canvas.resize(self.canvas.pixmap().size())
 
 
-    def setupMenu(self):
-        self.newFileAction = NewFileAction()
 
-        self.menuBar.fileMenu.addAction(self.newFileAction)
+
+
+
 
 
