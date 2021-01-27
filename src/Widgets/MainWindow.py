@@ -4,6 +4,8 @@ from src.Widgets.ViewArea import ViewArea
 from src.Widgets.Canvas import Canvas
 from src.Widgets.ColorPalette import PaletteHorizontal
 
+from src.Actions.NewFile import NewFileAction
+
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
@@ -14,8 +16,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.viewArea = ViewArea()
         self.colorPalette = PaletteHorizontal("32poly")
 
+        self.newFileAction = NewFileAction(self)
+
         self._initUI()
-        self.setCanvas()
+        #self.setCanvas()
 
     def _initUI(self):
         self.setMenuBar(self.menu)
@@ -30,9 +34,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(container)
 
         self.colorPalette.selected.connect(self.canvas.setPenColor)
+        self.menu.fileMenu.addAction(self.newFileAction)
 
-    def setCanvas(self):
-        self.canvas.setPixmap(QtGui.QPixmap(640, 480))
+    def setCanvas(self, width=640, height=480):
+        self.canvas.setPixmap(QtGui.QPixmap(width, height))
         self.canvas.pixmap().fill(QtCore.Qt.white)
         self.canvas.resize(self.canvas.pixmap().size())
 
