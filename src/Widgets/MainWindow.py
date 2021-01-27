@@ -7,6 +7,9 @@ from src.Widgets.ColorPalette import PaletteHorizontal
 from src.Actions.NewFile import NewFileAction
 from src.Actions.ImportImage import ImportFileAction
 from src.Actions.SaveImage import SaveImageAction
+from src.Actions.MakeGrayscale import MakeGrayscaleAction
+
+from src.Maths.ImageProcessor import ImageProcessor
 
 class MainWindow(QtWidgets.QMainWindow):
 
@@ -21,6 +24,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.newFileAction = NewFileAction(self)
         self.newFromImageAction = ImportFileAction(self)
         self.saveImageAction = SaveImageAction(self)
+
+        self.makeImageGrayscaleAction = MakeGrayscaleAction(self)
 
         self._initUI()
 
@@ -42,6 +47,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menu.fileMenu.addAction(self.newFromImageAction)
         self.menu.fileMenu.addAction(self.saveImageAction)
 
+        self.menu.editMenu.addAction(self.makeImageGrayscaleAction)
+
     def setNewCanvas(self, width=640, height=480):
         self.canvas.setPixmap(QtGui.QPixmap(width, height))
         self.canvas.pixmap().fill(QtCore.Qt.white)
@@ -53,6 +60,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def saveImage(self, filePath):
         self.canvas.pixmap().save(filePath)
+
+    def makeImageGrayscale(self):
+        if self.canvas.pixmap() is not None:
+            processor = ImageProcessor()
+            self.canvas.setPixmap(processor.grayscaleFromRGB(self.canvas.pixmap()))
+            self.canvas.resize(self.canvas.pixmap().size())
 
 
 
