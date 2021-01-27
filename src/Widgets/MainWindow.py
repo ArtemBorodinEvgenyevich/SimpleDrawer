@@ -6,6 +6,7 @@ from src.Widgets.ColorPalette import PaletteHorizontal
 
 from src.Actions.NewFile import NewFileAction
 from src.Actions.ImportImage import ImportFileAction
+from src.Actions.SaveImage import SaveImageAction
 
 class MainWindow(QtWidgets.QMainWindow):
 
@@ -19,6 +20,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.newFileAction = NewFileAction(self)
         self.newFromImageAction = ImportFileAction(self)
+        self.saveImageAction = SaveImageAction(self)
 
         self._initUI()
 
@@ -38,6 +40,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.menu.fileMenu.addAction(self.newFileAction)
         self.menu.fileMenu.addAction(self.newFromImageAction)
+        self.menu.fileMenu.addAction(self.saveImageAction)
 
     def setNewCanvas(self, width=640, height=480):
         self.canvas.setPixmap(QtGui.QPixmap(width, height))
@@ -47,6 +50,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def setNewCanvasFromFile(self, filePath):
         self.canvas.setPixmap(QtGui.QPixmap(filePath))
         self.canvas.resize(self.canvas.pixmap().size())
+
+    def saveImage(self, filePath):
+        self.canvas.pixmap().save(filePath)
 
 
 

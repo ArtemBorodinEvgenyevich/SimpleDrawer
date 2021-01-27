@@ -1,4 +1,4 @@
-import platform
+import os
 from PyQt5 import QtWidgets, QtGui, QtCore
 
 
@@ -13,7 +13,7 @@ class ImportFileAction(QtWidgets.QAction):
         file, ok = QtWidgets.QFileDialog.getOpenFileName(
             self.parent(),
             'Import Image',
-            'c\\' if platform.system() == 'Windows' else "$HOME",
+            f'{os.path.expanduser("~")}',
             'Image File (*.bmp *.jpg *.jpeg *.png)'
         )
         if ok:
