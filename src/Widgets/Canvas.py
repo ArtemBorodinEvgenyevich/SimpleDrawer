@@ -19,6 +19,7 @@ class Canvas(QtWidgets.QLabel):
             return  # Ignore the first time.
 
         painter = QtGui.QPainter(self.pixmap())
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
         p = painter.pen()
         p.setWidth(4)
         p.setColor(self.penColor)

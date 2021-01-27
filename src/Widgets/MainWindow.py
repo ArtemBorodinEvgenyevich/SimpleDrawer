@@ -8,6 +8,7 @@ from src.Actions.NewFile import NewFileAction
 from src.Actions.ImportImage import ImportFileAction
 from src.Actions.SaveImage import SaveImageAction
 from src.Actions.MakeGrayscale import MakeGrayscaleAction
+from src.Actions.BlurImage import BlurImageAction
 
 from src.Maths.ImageProcessor import ImageProcessor
 
@@ -26,6 +27,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.saveImageAction = SaveImageAction(self)
 
         self.makeImageGrayscaleAction = MakeGrayscaleAction(self)
+        self.blurImageAction = BlurImageAction(self)
 
         self._initUI()
 
@@ -48,6 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menu.fileMenu.addAction(self.saveImageAction)
 
         self.menu.editMenu.addAction(self.makeImageGrayscaleAction)
+        self.menu.editMenu.addAction(self.blurImageAction)
 
     def setNewCanvas(self, width=640, height=480):
         self.canvas.setPixmap(QtGui.QPixmap(width, height))
@@ -67,10 +70,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.canvas.setPixmap(processor.grayscaleFromRGB(self.canvas.pixmap()))
             self.canvas.resize(self.canvas.pixmap().size())
 
-
-
-
-
-
-
-
+    def makeImageBlured(self, radius: int):
+        if self.canvas.pixmap() is not None:
+            processor = ImageProcessor()
+            self.canvas.setPixmap(processor.gaussianBlur(self.canvas.pixmap(), radius))
+            self.canvas.resize(self.canvas.pixmap().size())
