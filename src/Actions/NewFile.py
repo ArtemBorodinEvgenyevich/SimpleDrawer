@@ -9,12 +9,12 @@ class NewFileAction(QtWidgets.QAction):
         self.setShortcut("Ctrl+N")
         self.triggered.connect(self._newFile)
 
-        self.dialog = NewFileDialog()
+        self._dialog = NewFileDialog()
 
     def _newFile(self):
-        if self.dialog.exec_():
-            pageSize = self.dialog.getPageSize()
-            self.parent().setCanvas(pageSize.width(), pageSize.height())
+        if self._dialog.exec_():
+            pageSize = self._dialog.getPageSize()
+            self.parent().setNewCanvas(pageSize.width(), pageSize.height())
 
 
 
