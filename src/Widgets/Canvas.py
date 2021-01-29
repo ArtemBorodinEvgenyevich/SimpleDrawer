@@ -52,6 +52,16 @@ class Canvas(QtWidgets.QLabel):
         self.pixmap().fill(self._toolColor)
         self.update()
 
+    def createCursor(self):
+        pixmap = QtGui.QPixmap(QtCore.QSize(1, 1) * self._toolSize)
+        pixmap.fill(QtCore.Qt.transparent)
+        painter = QtGui.QPainter(pixmap)
+        painter.setPen(QtGui.QPen(QtCore.Qt.black, 2))
+        painter.drawRect(pixmap.rect())
+        painter.end()
+        cursor = QtGui.QCursor(pixmap)
+        QtWidgets.QApplication.setOverrideCursor(cursor)
+
     def _penDraw(self, e):
         if self._last_x is None:  # First event.
             self._last_x = e.x()
@@ -100,4 +110,5 @@ class Canvas(QtWidgets.QLabel):
         painter.restore()
         painter.end()
         self.update()
+
 

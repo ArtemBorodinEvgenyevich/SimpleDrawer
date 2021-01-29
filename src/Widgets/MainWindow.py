@@ -26,7 +26,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.toolBar = QtWidgets.QToolBar()
         self.menu = MenuBar()
         self.canvas = Canvas()
-        self.viewArea = ViewArea()
+        self.viewArea = ViewArea(self)
+        self.container = QtWidgets.QWidget()
         self.colorPalette = PaletteHorizontal("32poly")
         self.toolSize = QtWidgets.QSpinBox()
         self.particlesAmount = QtWidgets.QSpinBox()
@@ -64,13 +65,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setMenuBar(self.menu)
         self.viewArea.setWidget(self.canvas)
 
-        container = QtWidgets.QWidget()
-        container.setLayout(QtWidgets.QVBoxLayout())
+        self.container.setParent(self)
+        self.container.setLayout(QtWidgets.QVBoxLayout())
 
-        container.layout().addWidget(self.colorPalette)
-        container.layout().addWidget(self.viewArea)
+        self.container.layout().addWidget(self.colorPalette)
+        self.container.layout().addWidget(self.viewArea)
 
-        self.setCentralWidget(container)
+        self.setCentralWidget(self.container)
 
         self.colorPalette.selected.connect(self.canvas.setToolColor)
         self.toolSize.valueChanged.connect(self.canvas.setToolSize)
@@ -99,7 +100,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.setBorder()
 
     def setNewCanvasFromFile(self, filePath):
-        self.canvas.setPixmap(QtGui.QPixmap(filePath))
+        image = QtGui.QImage(filePath).convertToFormat(QtGui.QImage.Format_ARGB32_Premultiplied)
+        for i in range(image.width()):
+            for j in range(image.height()):
+                color = image.pixelColor(i, j)
+                image.setPixel(i, j, color.rgba())
+        pixmap = QtGui.QPixmap(image.size())
+        pixmap.fill(QtCore.Qt.transparent)
+        painter = QtGui.QPainter(pixmap)
+        painter.drawImage(0, 0, image)
+        painter.end()
+        self.canvas.setPixmap(pixmap)
         self.canvas.resize(self.canvas.pixmap().size())
         self.canvas.setBorder()
 
