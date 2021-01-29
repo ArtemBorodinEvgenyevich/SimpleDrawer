@@ -13,6 +13,8 @@ from src.Actions.SetPen import SetPenAction
 from src.Actions.SetSpray import SetSprayAction
 from src.Actions.SetRubber import SetRubberAction
 from src.Actions.SetFill import SetFillAction
+from src.Actions.SetCircleShape import SetCircleShapeAction
+from src.Actions.SetSquareShape import SetSquareShapeAction
 
 from src.Maths.ImageProcessor import ImageProcessor
 from src.Enums.ToolEnum import ToolEnum
@@ -31,7 +33,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.colorPalette = PaletteHorizontal("32poly")
         self.toolSize = QtWidgets.QSpinBox()
         self.particlesAmount = QtWidgets.QSpinBox()
-
+        self.frameWidth = QtWidgets.QSpinBox()
 
         self.newFileAction = NewFileAction(self)
         self.newFromImageAction = ImportFileAction(self)
@@ -44,14 +46,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setSprayAction = SetSprayAction(self)
         self.setRubberAction = SetRubberAction(self)
         self.setFillAction = SetFillAction(self)
-
+        self.setCircleShape = SetCircleShapeAction(self)
+        self.setSquareShape = SetSquareShapeAction(self)
 
         self._initUI()
 
     def _initUI(self):
         self.addToolBar(self.toolBar)
         self.toolBar.setMovable(False)
-        #self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
 
         self.toolSize.setToolTip("Set tool size")
         self.toolSize.setValue(self.canvas.getToolSize())
@@ -61,6 +63,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.particlesAmount.setValue(self.canvas.getParticlesAmount())
         self.particlesAmount.setMinimumWidth(50)
         self.particlesAmount.setMaximum(4096)
+        self.frameWidth.setToolTip("Set Shape's frame width")
+        self.frameWidth.setValue(self.canvas.getFrameWidth())
+        self.frameWidth.setMinimumWidth(50)
 
         self.setMenuBar(self.menu)
         self.viewArea.setWidget(self.canvas)
@@ -76,15 +81,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.colorPalette.selected.connect(self.canvas.setToolColor)
         self.toolSize.valueChanged.connect(self.canvas.setToolSize)
         self.particlesAmount.valueChanged.connect(self.canvas.setParticlesAmount)
+        self.frameWidth.valueChanged.connect(self.canvas.setFrameWidth)
 
         self.toolBar.addAction(self.setPenAction)
         self.toolBar.addAction(self.setSprayAction)
         self.toolBar.addAction(self.setFillAction)
+        self.toolBar.addAction(self.setSquareShape)
+        self.toolBar.addAction(self.setCircleShape)
         self.toolBar.addAction(self.setRubberAction)
 
         self.toolBar.addSeparator()
         self.toolBar.addWidget(self.toolSize)
         self.toolBar.addWidget(self.particlesAmount)
+        self.toolBar.addWidget(self.frameWidth)
 
         self.menu.fileMenu.addAction(self.newFileAction)
         self.menu.fileMenu.addAction(self.newFromImageAction)

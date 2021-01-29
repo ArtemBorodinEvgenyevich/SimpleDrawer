@@ -6,3 +6,5 @@ class ToolEnum(Enum):
     SPRAY = auto()
     RUBBER = auto()
     FILL = auto()
+    SQUARE = auto()
+    CIRCLE = auto()

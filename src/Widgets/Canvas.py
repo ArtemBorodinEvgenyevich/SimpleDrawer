@@ -12,6 +12,7 @@ class Canvas(QtWidgets.QLabel):
         self._toolColor = QtGui.QColor('#000000')
         self._toolSize = 10
         self._toolType = ToolEnum.PEN
+        self._frameWidth = 5
 
     def setToolColor(self, color):
         self._toolColor = QtGui.QColor(color)
@@ -23,6 +24,12 @@ class Canvas(QtWidgets.QLabel):
             self._sprayDraw(e)
         elif self._toolType is ToolEnum.RUBBER:
             self._rubberErase(e)
+
+    def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
+        if self._toolType is ToolEnum.SQUARE:
+            self._drawSquare(ev)
+        elif self._toolType is ToolEnum.CIRCLE:
+            self._drawCircle(ev)
 
     def mouseReleaseEvent(self, e):
         self._last_x = None
@@ -42,6 +49,12 @@ class Canvas(QtWidgets.QLabel):
 
     def getParticlesAmount(self):
         return self._particlesAmount
+
+    def setFrameWidth(self, px: int):
+        self._frameWidth = px
+
+    def getFrameWidth(self):
+        return self._frameWidth
 
     def setBorder(self):
         if self.pixmap() is not None:
@@ -110,5 +123,32 @@ class Canvas(QtWidgets.QLabel):
         painter.restore()
         painter.end()
         self.update()
+
+    def _drawSquare(self, e):
+        painter = QtGui.QPainter(self.pixmap())
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
+        p = painter.pen()
+        p.setWidth(self._frameWidth)
+        p.setColor(self._toolColor)
+        painter.setPen(p)
+        rect = QtCore.QRect(QtCore.QPoint(), self._toolSize*QtCore.QSize())
+        rect.moveCenter(e.pos())
+        painter.drawRect(rect)
+        painter.end()
+        self.update()
+
+    def _drawCircle(self, e):
+        painter = QtGui.QPainter(self.pixmap())
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
+        p = painter.pen()
+        p.setWidth(self._frameWidth)
+        p.setColor(self._toolColor)
+        painter.setPen(p)
+        rect = QtCore.QRect(QtCore.QPoint(), self._toolSize*QtCore.QSize())
+        rect.moveCenter(e.pos())
+        painter.drawEllipse(rect)
+        painter.end()
+        self.update()
+
 
 
